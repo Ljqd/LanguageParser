@@ -12,10 +12,10 @@ FileWrapper::Status FileWrapper::getStatus()
 
 void FileWrapper::openFileForRead()
 {
-	if (file.is_open())
-		file.close();
+	if (isFileOpened())
+		closeFile();
 	file.open(filename, std::fstream::in);
-	if (file.is_open())
+	if (isFileOpened())
 		status = Status::OpenedForRead;
 }
 
