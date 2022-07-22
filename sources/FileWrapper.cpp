@@ -21,10 +21,10 @@ void FileWrapper::openFileForRead()
 
 void FileWrapper::openFileForWrite()
 {
-	if (file.is_open())
-		file.close();
+	if (isFileOpened())
+		closeFile();
 	file.open(filename, std::fstream::out);
-	if (file.is_open())
+	if (isFileOpened())
 		status = Status::OpenedForWrite;
 }
 
