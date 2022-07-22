@@ -2,6 +2,7 @@
 
 #include <string>
 #include <regex>
+#include <algorithm>
 
 
 class LinePreprocessor
@@ -11,12 +12,10 @@ public:
 	LinePreprocessor(const LinePreprocessor& other) = default;
 	LinePreprocessor& operator=(const LinePreprocessor& other) = default;
 
-	std::string popRegex(const std::string& line, const std::string& word);
-	std::string popRegex(const std::string& line, const std::regex& regex);
+	void popWord(std::string& line, const std::string word);
+	void toLower(std::string& line);
+	void removeNumbers(std::string& line);
 
-	std::string popRegex(const std::string& line, const std::string& word) const;
-	std::string popRegex(const std::string& line, const std::regex& regex) const;
-
-	// static std::string popRegex(const std::string& line, const std::string& word);
-	// static std::string popRegex(const std::string& line, const std::regex& regex);
+private:
+	void regexReplace(std::string& original, const std::string& regex, std::string format);
 };

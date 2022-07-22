@@ -1,68 +1,21 @@
 #include "FileWrapper.h"
 
 
-FileWrapper::FileWrapper(const std::string& filename) :
-	file{}, filename{ filename }, status{ Status::NotOpened }
-{}
-
-FileWrapper::Status FileWrapper::getStatus()
+FileWrapper::FileWrapper(const std::string& filename, FileWrapper::Status status) :
+	path{ filename }, status{ status }
 {
-	return status;
-}
-
-void FileWrapper::openFileForRead()
-{
-	if (isFileOpened())
-		closeFile();
-	file.open(filename, std::fstream::in);
-	if (isFileOpened())
-		status = Status::OpenedForRead;
-}
-
-void FileWrapper::openFileForWrite()
-{
-	if (isFileOpened())
-		closeFile();
-	file.open(filename, std::fstream::out);
-	if (isFileOpened())
-		status = Status::OpenedForWrite;
-}
-
-void FileWrapper::closeFile()
-{
-	file.close();
-	status = Status::NotOpened;
+	if (status == Status::OpenedForRead)
+		file.open(filename, std::fstream::in);
+	else if (status == Status::OpenedForWrite)
+		file.open(filename, std::fstream::out);
+	
+	bool a = file.is_open();
+	assert(file.is_open());
 }
 
 void FileWrapper::resetFile()
 {
 	file.seekg(0, std::ios::beg);
-}
-
-bool FileWrapper::isFileOpened()
-{
-	bool isOpen = file.is_open();
-	assert(
-		(isOpen == true  && status != Status::NotOpened) ||
-		(isOpen == false && status == Status::NotOpened)
-	);
-	return isOpen;
-}
-
-bool FileWrapper::isEof()
-{
-	return file.eof();
-}
-
-std::string FileWrapper::getFilename()
-{
-	return filename;
-}
-
-void FileWrapper::updateFilename(const std::string& newFilename)
-{
-	closeFile();
-	filename = newFilename;
 }
 
 std::string FileWrapper::getNextLine()
@@ -80,4 +33,34 @@ void FileWrapper::writeLine(const std::string& nextLine, bool flush)
 		if (flush)
 			file.flush();
 	}
+}
+
+FileWrapper::Status FileWrapper::getStatus()
+{
+	return status;
+}
+
+FileWrapper::Status FileWrapper::getStatus() const
+{
+	return status;
+}
+
+bool FileWrapper::isEof()
+{
+	return file.eof();
+}
+
+bool FileWrapper::isEof() const
+{
+	return file.eof();
+}
+
+std::string FileWrapper::getPath()
+{
+	return path;
+}
+
+std::string FileWrapper::getPath() const
+{
+	return path;
 }
